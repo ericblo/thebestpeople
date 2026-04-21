@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/thebestpeople/:match*",
+      "destination": "https://thebestpeople-529np46se-erics-projects-bf9f34a7.vercel.app/:match*"
+    }
+  ]
+}
