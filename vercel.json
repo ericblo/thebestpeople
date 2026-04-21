@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/thebestpeople/:match*",
-      "destination": "ttps://thebestpeople-essfvtnzs-erics-projects-bf9f34a7.vercel.app/:match*"
+      "destination": "https://thebestpeople-essfvtnzs-erics-projects-bf9f34a7.vercel.app/:match*"
     }
   ]
 }
