@@ -1,14 +1,6 @@
-// next.config.mjs
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   basePath: '/thebestpeople',
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/thebestpeople',
-        permanent: true,
-        basePath: false, // This allows the redirect to work from the actual root
-      },
-    ]
-  },
-}
+};
+
+export default nextConfig;
