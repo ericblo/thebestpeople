@@ -45,7 +45,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "I know the best people. I know the best managers. I know the best dealmakers. I know people who will make us so strong. I know guys that are so good.",
     quoteSource: "https://www.ms.now/top-stories/latest/trump-white-house-cabinet-project-2025-rcna177081",
-    photo: "/photos/trump.jpg",
+    photo: "/thebestpeople/photos/trump.jpg",
   },
   {
     id: "pence",
@@ -55,7 +55,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "President Trump was wrong. I had no right to overturn the election. And his reckless words endangered my family and everyone at the Capitol.",
     quoteSource: "https://www.nytimes.com/2022/02/04/us/politics/pence-trump-jan-6.html",
-    photo: "/photos/pence.jpg",
+    photo: "/thebestpeople/photos/pence.jpg",
   },
   {
     id: "tillerson",
@@ -65,7 +65,7 @@ const people: Person[] = [
     endDate: "2018-03",
     quote: "[He is] a man who is pretty undisciplined, doesn't like to read, doesn't read briefing reports, doesn't like to get into the details of a lot of things.",
     quoteSource: "https://www.bbc.com/news/world-us-canada-46492744",
-    photo: "/photos/tillerson.jpg",
+    photo: "/thebestpeople/photos/tillerson.jpg",
   },
   {
     id: "pompeo",
@@ -75,7 +75,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "You know, Donald Trump the other day said that, in quote, if he tells a soldier to commit a war crime, the soldier will just go do it. He said they'll do as I tell them to do.",
     quoteSource: "https://www.newsweek.com/mike-pompeo-trump-obama-2016-authoritarian-president-ignored-constitution-1455073",
-    photo: "/photos/pompeo.jpg",
+    photo: "/thebestpeople/photos/pompeo.jpg",
   },
   {
     id: "sessions",
@@ -85,7 +85,7 @@ const people: Person[] = [
     endDate: "2018-11",
     quote: "He is a person who has no loyalty. He doesn't understand the concepts of law and justice.",
     quoteSource: "https://www.theatlantic.com/politics/archive/2020/11/jeff-sessions-trump-loyalty/617180/",
-    photo: "/photos/sessions.jpg",
+    photo: "/thebestpeople/photos/sessions.jpg",
   },
   {
     id: "whitaker",
@@ -95,7 +95,7 @@ const people: Person[] = [
     endDate: "2019-02",
     quote: "The president... does he have anyone that has the president's ear? Or does he just kind of watch news accounts and responds to [them], which is a little dangerous.",
     quoteSource: "https://theweek.com/speedreads/810363/acting-attorney-general-matthew-whitaker-criticized-trump-interviews-unlikable-selfserving-dangerous",
-    photo: "/photos/whitaker.jpg",
+    photo: "/thebestpeople/photos/whitaker.jpg",
   },
   {
     id: "barr",
@@ -105,7 +105,7 @@ const people: Person[] = [
     endDate: "2020-12",
     quote: "He is a consummate narcissist and constantly engages in reckless conduct that puts his political party and the country at risk.",
     quoteSource: "https://www.npr.org/2022/03/06/1084883520/william-barr-new-book-trump-2024-election",
-    photo: "/photos/barr.jpg",
+    photo: "/thebestpeople/photos/barr.jpg",
   },
   {
     id: "priebus",
@@ -115,7 +115,7 @@ const people: Person[] = [
     endDate: "2017-07",
     quote: "No woman should ever be described in these terms or talked about in this manner. Ever.",
     quoteSource: "https://www.pbs.org/newshour/politics/headline-republicans-react-trump-comments-objectifying-women",
-    photo: "/photos/priebus.jpg",
+    photo: "/thebestpeople/photos/priebus.jpg",
   },
   {
     id: "kelly",
@@ -125,7 +125,7 @@ const people: Person[] = [
     endDate: "2019-01",
     quote: "A person that has no idea what America stands for and has no idea what being an American is all about... He is a person who admires autocrats and murderous dictators.",
     quoteSource: "https://www.nytimes.com/2023/10/02/us/politics/john-kelly-trump-fitness-office.html",
-    photo: "/photos/kelly.jpg",
+    photo: "/thebestpeople/photos/kelly.jpg",
   },
   {
     id: "mulvaney",
@@ -135,7 +135,7 @@ const people: Person[] = [
     endDate: "2020-03",
     quote: "He failed at being the president when we needed him to be that.",
     quoteSource: "https://www.cnbc.com/2022/06/28/trump-was-wrong-mick-mulvaney-says-hes-changed-views-on-jan-6.html",
-    photo: "/photos/mulvaney.jpg",
+    photo: "/thebestpeople/photos/mulvaney.jpg",
   },
   {
     id: "meadows",
@@ -145,7 +145,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "If I can get through this job and manage to keep him out of jail, I'll have done a good job.",
     quoteSource: "https://www.nbcnews.com/politics/donald-trump/cassidy-hutchinson-reveals-details-disarray-trumps-white-house-rcna117344",
-    photo: "/photos/meadows.jpg",
+    photo: "/thebestpeople/photos/meadows.jpg",
   },
   {
     id: "mattis",
@@ -155,7 +155,7 @@ const people: Person[] = [
     endDate: "2019-01",
     quote: "Donald Trump is the first president in my lifetime who does not try to unite the American people—does not even pretend to try. Instead, he tries to divide us.",
     quoteSource: "https://www.theatlantic.com/politics/archive/2020/06/james-mattis-denounces-trump-protests-militarization/612640/",
-    photo: "/photos/mattis.jpg",
+    photo: "/thebestpeople/photos/mattis.jpg",
   },
   {
     id: "shanahan",
@@ -165,7 +165,7 @@ const people: Person[] = [
     endDate: "2019-06",
     quote: "I expect you to remind leaders at all levels in the Department to reinforce the apolitical nature of military service and professionalism.",
     quoteSource: "https://www.cbsnews.com/news/patrick-shanahan-acting-defense-secretary-urges-military-to-maintain-apolitical-nature-in-new-internal-memo/",
-    photo: "/photos/shanahan.jpg",
+    photo: "/thebestpeople/photos/shanahan.jpg",
   },
   {
     id: "esper",
@@ -175,7 +175,7 @@ const people: Person[] = [
     endDate: "2020-11",
     quote: "I do regard him as a threat to democracy... I think he's unfit for office.",
     quoteSource: "https://www.cbsnews.com/news/mark-esper-former-defense-secretary-60-minutes-2022-05-08/",
-    photo: "/photos/esper.jpg",
+    photo: "/thebestpeople/photos/esper.jpg",
   },
   {
     id: "mcmaster",
@@ -185,7 +185,7 @@ const people: Person[] = [
     endDate: "2018-04",
     quote: "[Trump'] encouraged an attack, you know, on the first branch of government, and an attack on the peaceful transition of power, and I think that that was an abandonment of his responsibilities to the Constitution",
     quoteSource: "https://www.cbsnews.com/news/h-r-mcmaster-at-war-with-ourselves-my-tour-of-duty-in-the-trump-white-house",
-    photo: "/photos/mcmaster.jpg",
+    photo: "/thebestpeople/photos/mcmaster.jpg",
   },
   {
     id: "bolton",
@@ -195,7 +195,7 @@ const people: Person[] = [
     endDate: "2019-09",
     quote: "I don't think he's fit for office. I don't think he has the competence to carry out the job.",
     quoteSource: "https://abcnews.go.com/Politics/john-bolton-book-interview-trump-fit-office-reelection/story?id=71334168",
-    photo: "/photos/bolton.jpg",
+    photo: "/thebestpeople/photos/bolton.jpg",
   },
   {
     id: "obrien",
@@ -205,7 +205,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "And Donald Trump is—has said that he's willing to scrap our alliance with NATO. He's willing to scrap our… alliances in the Pacific with Japan and Korea and South Korea. I mean, these are extraordinarily dangerous statements at a time that the world does not need that sort of inconsistent and wavering American leadership given the threats that we're facing.",
     quoteSource: "https://www.cnn.com/2019/10/05/politics/robert-obrien-extraordinarily-dangerous-kfile",
-    photo: "/photos/obrien.jpg",
+    photo: "/thebestpeople/photos/obrien.jpg",
   },
   {
     id: "dunford",
@@ -215,7 +215,7 @@ const people: Person[] = [
     endDate: "2019-09",
     quote: "The military remains apolitical. Our oath is to the Constitution.",
     quoteSource: "https://www.defense.gov/News/Transcripts/Transcript/Article/1959014/chairman-of-the-joint-chiefs-of-staff-gen-joe-dunford-retirement-ceremony/",
-    photo: "/photos/dunford.jpg",
+    photo: "/thebestpeople/photos/dunford.jpg",
   },
   {
     id: "milley",
@@ -225,7 +225,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "We don't take an oath to a wannabe dictator. We take an oath to the Constitution.",
     quoteSource: "https://www.cnn.com/2023/10/01/politics/mark-milley-retirement-ceremony/index.html",
-    photo: "/photos/milley.jpg",
+    photo: "/thebestpeople/photos/milley.jpg",
   },
   {
     id: "coats",
@@ -235,7 +235,7 @@ const people: Person[] = [
     endDate: "2019-08",
     quote: "To him, a lie is not a lie. It’s just what he thinks. He doesn’t know the difference between the truth and a lie.",
     quoteSource: "https://edition.cnn.com/2020/09/09/politics/president-trump-national-security-advisers-rage-book",
-    photo: "/photos/coats.jpg?v=3",
+    photo: "/thebestpeople/photos/coats.jpg?v=3",
   },
   {
     id: "ratcliffe",
@@ -245,7 +245,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "It could spiral out of control and potentially be dangerous either for our democracy or the way things were going for [Jan.] 6.",
     quoteSource: "https://www.texastribune.org/2022/06/28/john-ratcliffe-cassidy-hutchinson-trump-jan-6",
-    photo: "/photos/ratcliffe.jpg?v=3",
+    photo: "/thebestpeople/photos/ratcliffe.jpg?v=3",
   },
   {
     id: "devos",
@@ -255,7 +255,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "There is no mistaking the impact your rhetoric had on the situation, and it is the inflection point for me.",
     quoteSource: "https://apnews.com/article/betsy-devos-government-and-politics-political-resignations-ap-news-alert-a210824e4b216c874dec9380d82f23fc",
-    photo: "/photos/devos.jpg?v=3",
+    photo: "/thebestpeople/photos/devos.jpg?v=3",
   },
   {
     id: "chao",
@@ -265,7 +265,7 @@ const people: Person[] = [
     endDate: "2021-01",
     quote: "I was deeply troubled by the events of yesterday... It has deeply troubled me in a way that I simply cannot set aside.",
     quoteSource: "https://abcnews.go.com/Politics/chao-trump-cabinet-member-resign-capitol-storming/story?id=75113253",
-    photo: "/photos/chao.jpg?v=3",
+    photo: "/thebestpeople/photos/chao.jpg?v=3",
   },
 ];
 
