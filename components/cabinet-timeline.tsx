@@ -8,7 +8,8 @@ import { ArrowDown, ExternalLink, X } from "lucide-react";
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
 // The page only ever shows small round portraits, so it uses 160px thumbnails
 // (a few KB each) rather than the 1024px originals in /public/photos.
-const photo = (file: string) => `${BASE_PATH}/photos/thumbs/${file.split("?")[0]}`;
+const photo = (file: string) =>
+  `${BASE_PATH}/photos/thumbs/${file.split("?")[0]}`;
 
 // Types
 interface Person {
@@ -554,7 +555,32 @@ const scheduleByMonth = new Map(
   scrollSchedule.map((entry) => [entry.month, entry]),
 );
 
-const GRID_COLUMNS = `48px repeat(${roles.length}, minmax(0, 1fr))`;
+// One narrow date column plus one column per role. On phones the columns are
+// slim bars so that all of them fit on screen with no sideways scrolling.
+const GRID_CLASSES =
+  "grid gap-x-0.5 md:gap-x-1.5 grid-cols-[30px_repeat(11,minmax(0,1fr))] md:grid-cols-[48px_repeat(11,minmax(0,1fr))]";
+
+// Column labels short enough for a ~28px wide phone column.
+const roleAbbr: Record<string, string> = {
+  president: "Pres",
+  vp: "VP",
+  sos: "State",
+  ag: "AG",
+  cos: "CoS",
+  secdef: "Def",
+  nsa: "NSA",
+  cjcs: "JCS",
+  dni: "DNI",
+  seced: "Ed",
+  sectrans: "DOT",
+};
+
+const exitBarClass: Record<ExitKind, string> = {
+  fired: "bg-destructive",
+  resigned: "bg-primary",
+  replaced: "bg-muted-foreground/50",
+  term: "bg-transparent",
+};
 
 const exitTagClass: Record<ExitKind, string> = {
   fired: "text-destructive",
@@ -684,8 +710,8 @@ function Hero() {
           : new Promise<void>((resolve) => {
               img.addEventListener("load", () => resolve(), { once: true });
               img.addEventListener("error", () => resolve(), { once: true });
-            })
-      )
+            }),
+      ),
     ).then(reveal);
     // Never leave the strip hidden if a photo stalls.
     const fallback = window.setTimeout(reveal, 3000);
@@ -757,14 +783,11 @@ export function CabinetTimeline() {
   const [headerHeight, setHeaderHeight] = useState(120);
 
   const blockRefs = useRef<Map<string, HTMLButtonElement>>(new Map());
-  const innerRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const headerRef = useRef<HTMLElement>(null);
   const gridRef = useRef<HTMLDivElement>(null);
   const clickedPersonIdRef = useRef<string | null>(null);
   const justClickedRef = useRef<boolean>(false);
   const headerHeightRef = useRef(headerHeight);
-  const headerScrollRef = useRef<HTMLDivElement>(null);
-  const timelineScrollRef = useRef<HTMLDivElement>(null);
 
   // Keep refs in sync with state so the scroll handler reads the latest values
   useEffect(() => {
@@ -785,36 +808,10 @@ export function CabinetTimeline() {
     return () => observer.disconnect();
   }, []);
 
-  // On narrow screens the timeline scrolls sideways inside its own container,
-  // which disables CSS `position: sticky` for the portraits. Pin them by hand.
-  const pinPortraits = useCallback(() => {
-    const timeline = timelineScrollRef.current;
-    if (!timeline) return;
-    const needsManualPin = timeline.scrollWidth > timeline.clientWidth + 1;
-    const pinTop = headerHeightRef.current + 10;
-    innerRefs.current.forEach((inner, personId) => {
-      if (!needsManualPin) {
-        if (inner.style.transform) inner.style.transform = "";
-        return;
-      }
-      const block = blockRefs.current.get(personId);
-      if (!block) return;
-      const rect = block.getBoundingClientRect();
-      const max = Math.max(
-        0,
-        rect.height - inner.offsetHeight - EXIT_TAG_SPACE,
-      );
-      const shift = Math.min(Math.max(pinTop - rect.top, 0), max);
-      inner.style.transform = shift ? `translateY(${shift}px)` : "";
-    });
-  }, []);
-
   // Decide who is in the spotlight.
   // Priority: (1) a scroll-schedule entry for the month at the focus line,
   // (2) the most recent arrival whose trigger offset has been scrolled past.
   const handleScroll = useCallback(() => {
-    pinPortraits();
-
     // The first scroll after clicking someone returns to scroll storytelling.
     if (clickedPersonIdRef.current) {
       if (justClickedRef.current) {
@@ -859,7 +856,7 @@ export function CabinetTimeline() {
     }
     setHighlightedPersonId(active);
     setScheduleOverride(null);
-  }, [pinPortraits]);
+  }, []);
 
   useEffect(() => {
     handleScroll();
@@ -879,55 +876,6 @@ export function CabinetTimeline() {
       if (rafId !== null) cancelAnimationFrame(rafId);
     };
   }, [handleScroll]);
-
-  // The role-header row mirrors the timeline's horizontal scroll.
-  useEffect(() => {
-    const timeline = timelineScrollRef.current;
-    const header = headerScrollRef.current;
-    if (!timeline || !header) return;
-
-    let rafId: number | null = null;
-    const apply = () => {
-      rafId = null;
-      header.scrollLeft = timeline.scrollLeft;
-    };
-    const onScroll = () => {
-      if (rafId !== null) return;
-      rafId = requestAnimationFrame(apply);
-    };
-
-    apply();
-    timeline.addEventListener("scroll", onScroll, { passive: true });
-    return () => {
-      timeline.removeEventListener("scroll", onScroll);
-      if (rafId !== null) cancelAnimationFrame(rafId);
-    };
-  }, []);
-
-  // When the spotlight moves to a column that is off screen (narrow screens),
-  // bring that column into view.
-  useEffect(() => {
-    const timeline = timelineScrollRef.current;
-    const block =
-      highlightedPersonId && blockRefs.current.get(highlightedPersonId);
-    if (!timeline || !block) return;
-    if (timeline.scrollWidth <= timeline.clientWidth + 1) return;
-    const frame = timeline.getBoundingClientRect();
-    const rect = block.getBoundingClientRect();
-    const dateColumn = 48;
-    if (rect.left >= frame.left + dateColumn && rect.right <= frame.right)
-      return;
-    const reduceMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-    timeline.scrollTo({
-      left:
-        timeline.scrollLeft +
-        (rect.left - frame.left) -
-        (frame.width + dateColumn - rect.width) / 2,
-      behavior: reduceMotion ? "auto" : "smooth",
-    });
-  }, [highlightedPersonId]);
 
   const handlePersonClick = useCallback((personId: string) => {
     // Guard: ignore a scroll event that may fire as a result of this click
@@ -985,35 +933,27 @@ export function CabinetTimeline() {
               The Best People
             </p>
             <p className="text-[11px] md:text-xs text-muted-foreground text-right">
-              <span className="lg:hidden">Swipe sideways for more roles</span>
+              <span className="lg:hidden">Tap anyone to read their quote</span>
               <span className="hidden lg:inline">
                 What a few employees think of their boss
               </span>
             </p>
           </div>
 
-          {/* Role headers row. Mirrors the timeline's scrollLeft; the user only
-              scrolls the timeline and this row follows (pointer-events-none). */}
-          <div
-            ref={headerScrollRef}
-            className="overflow-x-scroll overflow-y-hidden scrollbar-hide pointer-events-none"
-          >
-            <div className="min-w-[980px] lg:min-w-0 max-w-[1200px] mx-auto px-3 md:px-4">
-              <div
-                className="grid gap-x-1.5 pt-3 pb-2.5"
-                style={{ gridTemplateColumns: GRID_COLUMNS }}
-              >
-                <div className="sticky left-0 z-20 bg-background" />
-                {roles.map((role) => (
-                  <div
-                    key={role.id}
-                    title={role.title}
-                    className="min-w-0 flex items-end justify-center text-center text-[9px] 2xl:text-[10px] font-medium uppercase tracking-[0.06em] leading-tight text-foreground/80 [overflow-wrap:anywhere]"
-                  >
-                    {role.shortTitle}
-                  </div>
-                ))}
-              </div>
+          {/* Role headers row */}
+          <div className="max-w-[1200px] mx-auto px-2 md:px-4">
+            <div className={`${GRID_CLASSES} pt-3 pb-2.5`}>
+              <div />
+              {roles.map((role) => (
+                <div
+                  key={role.id}
+                  title={role.title}
+                  className="min-w-0 flex items-end justify-center text-center text-[9px] md:text-[8px] lg:text-[9px] 2xl:text-[10px] font-medium md:uppercase lg:tracking-[0.06em] leading-tight text-foreground/80 [overflow-wrap:anywhere]"
+                >
+                  <span className="md:hidden">{roleAbbr[role.id]}</span>
+                  <span className="hidden md:inline">{role.shortTitle}</span>
+                </div>
+              ))}
             </div>
           </div>
         </div>
@@ -1021,16 +961,12 @@ export function CabinetTimeline() {
 
       {/* Timeline */}
       <main className="relative pt-3 pb-[50vh] xl:pb-40 xl:pr-[380px]">
-        <div
-          ref={timelineScrollRef}
-          className="overflow-x-auto lg:overflow-visible momentum-scroll"
-        >
-          <div className="min-w-[980px] lg:min-w-0 max-w-[1200px] mx-auto px-3 md:px-4">
+        <div>
+          <div className="max-w-[1200px] mx-auto px-2 md:px-4">
             <div
               ref={gridRef}
-              className="grid gap-x-1.5 gap-y-0 relative"
+              className={`${GRID_CLASSES} gap-y-0 relative`}
               style={{
-                gridTemplateColumns: GRID_COLUMNS,
                 gridTemplateRows: `repeat(${TOTAL_ROWS}, ${ROW_HEIGHT}px)`,
                 backgroundImage:
                   "linear-gradient(to bottom, color-mix(in oklch, var(--border) 30%, transparent) 1px, transparent 1px)",
@@ -1053,17 +989,17 @@ export function CabinetTimeline() {
               {months.map((month, idx) => (
                 <div
                   key={`month-${month.year}-${month.month}`}
-                  className={`sticky left-0 z-30 bg-background flex items-start justify-end pr-2 pt-1 ${
+                  className={`flex items-start justify-end pr-1 md:pr-2 pt-1 ${
                     month.month === 1 ? "border-t border-primary/35" : ""
                   }`}
                   style={{ gridColumn: 1, gridRow: idx + 1 }}
                 >
                   {month.month === 1 ? (
-                    <span className="font-serif text-base text-primary leading-none">
+                    <span className="font-serif text-xs md:text-base text-primary leading-none">
                       {month.year}
                     </span>
                   ) : (
-                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground/70">
+                    <span className="text-[8px] md:text-[10px] uppercase md:tracking-wider text-muted-foreground/70">
                       {month.name}
                     </span>
                   )}
@@ -1100,7 +1036,7 @@ export function CabinetTimeline() {
                       aria-pressed={clickedPersonId === person.id}
                       aria-label={`${person.name}, ${roles[roleIndex].title}. Show quote.`}
                       className={`
-                      group relative block w-full my-0.5 rounded-md border text-center
+                      group relative block w-full my-0.5 rounded-sm md:rounded-md border text-center
                       cursor-pointer touch-manipulation
                       transition-[background-color,border-color,box-shadow] duration-500 ease-out
                       focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary
@@ -1126,11 +1062,7 @@ export function CabinetTimeline() {
                         style={{ bottom: EXIT_TAG_SPACE }}
                       >
                         <div
-                          ref={(el) => {
-                            if (el) innerRefs.current.set(person.id, el);
-                            else innerRefs.current.delete(person.id);
-                          }}
-                          className="lg:sticky flex flex-col items-center gap-1.5 px-1 pt-2.5 pb-1 will-change-transform"
+                          className="sticky flex flex-col items-center gap-1.5 px-px md:px-1 pt-1 md:pt-2.5 pb-1"
                           style={{ top: "calc(var(--header-h) + 10px)" }}
                         >
                           <img
@@ -1138,17 +1070,17 @@ export function CabinetTimeline() {
                             alt=""
                             loading="lazy"
                             className={`
-                          w-10 h-10 lg:w-14 lg:h-14 rounded-full object-cover
+                          w-full max-w-10 lg:max-w-14 aspect-square rounded-full object-cover
                           transition-[filter,opacity,box-shadow] duration-500
                           ${
                             isActive
-                              ? "grayscale-0 opacity-100 ring-2 ring-primary ring-offset-2 ring-offset-background"
+                              ? "grayscale-0 opacity-100 ring-1 md:ring-2 ring-primary md:ring-offset-2 ring-offset-background"
                               : "grayscale opacity-60 ring-1 ring-border group-hover:grayscale-0 group-hover:opacity-100"
                           }
                         `}
                           />
                           <span
-                            className={`text-[10px] lg:text-xs font-medium leading-tight text-balance transition-colors duration-500 ${
+                            className={`hidden md:block text-[10px] lg:text-xs font-medium leading-tight text-balance transition-colors duration-500 ${
                               isActive
                                 ? "text-foreground"
                                 : "text-foreground/65"
@@ -1156,16 +1088,21 @@ export function CabinetTimeline() {
                           >
                             {person.name}
                           </span>
-                          <span className="text-[9px] lg:text-[10px] text-muted-foreground tabular-nums leading-none">
+                          <span className="hidden md:block text-[9px] lg:text-[10px] text-muted-foreground tabular-nums leading-none">
                             {formatTenure(tenureMonths(person))}
                           </span>
                         </div>
                       </div>
                       <span
-                        className={`absolute inset-x-1 bottom-1.5 text-[8px] lg:text-[9px] uppercase tracking-wide leading-tight text-balance ${exitTagClass[person.exit.kind]}`}
+                        className={`hidden md:block absolute inset-x-1 bottom-1.5 text-[8px] lg:text-[9px] uppercase tracking-wide leading-tight text-balance ${exitTagClass[person.exit.kind]}`}
                       >
                         {person.exit.label}
                       </span>
+                      {/* Phones: no room for the exit label, so mark it by colour */}
+                      <span
+                        aria-hidden
+                        className={`md:hidden absolute inset-x-1 bottom-1 h-0.5 rounded-full ${exitBarClass[person.exit.kind]}`}
+                      />
                     </button>
                   );
                 },
