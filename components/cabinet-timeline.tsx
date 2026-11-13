@@ -6,7 +6,9 @@ import { ArrowDown, ExternalLink, X } from "lucide-react";
 // Photos live in /public/photos. Respect the optional sub-path deployment
 // (NEXT_PUBLIC_BASE_PATH, e.g. "/thebestpeople") instead of hard-coding it.
 const BASE_PATH = process.env.NEXT_PUBLIC_BASE_PATH || "";
-const photo = (file: string) => `${BASE_PATH}/photos/${file}`;
+// The page only ever shows small round portraits, so it uses 160px thumbnails
+// (a few KB each) rather than the 1024px originals in /public/photos.
+const photo = (file: string) => `${BASE_PATH}/photos/thumbs/${file.split("?")[0]}`;
 
 // Types
 interface Person {
@@ -665,6 +667,34 @@ function QuoteCard({ person, compact }: { person: Person; compact?: boolean }) {
 // Hero
 // ============================================================================
 function Hero() {
+  // Reveal the strip of faces in one go, once every portrait has loaded,
+  // rather than letting them pop in one at a time.
+  const stripRef = useRef<HTMLDivElement>(null);
+  const [facesReady, setFacesReady] = useState(false);
+  useEffect(() => {
+    const images = Array.from(stripRef.current?.querySelectorAll("img") ?? []);
+    let cancelled = false;
+    const reveal = () => {
+      if (!cancelled) setFacesReady(true);
+    };
+    Promise.all(
+      images.map((img) =>
+        img.complete
+          ? Promise.resolve()
+          : new Promise<void>((resolve) => {
+              img.addEventListener("load", () => resolve(), { once: true });
+              img.addEventListener("error", () => resolve(), { once: true });
+            })
+      )
+    ).then(reveal);
+    // Never leave the strip hidden if a photo stalls.
+    const fallback = window.setTimeout(reveal, 3000);
+    return () => {
+      cancelled = true;
+      window.clearTimeout(fallback);
+    };
+  }, []);
+
   return (
     <section className="relative min-h-[100svh] flex flex-col items-center justify-center text-center px-6 py-16 overflow-hidden">
       <div
@@ -685,7 +715,12 @@ function Hero() {
         What a few employees think of their boss.
       </p>
 
-      <div className="relative flex flex-wrap justify-center max-w-xl mt-10 md:mt-14 pl-2">
+      <div
+        ref={stripRef}
+        className={`relative flex flex-wrap justify-center max-w-xl mt-10 md:mt-14 pl-2 transition-opacity duration-700 ${
+          facesReady ? "opacity-100" : "opacity-0"
+        }`}
+      >
         {people
           .filter((p) => p.id !== "trump")
           .map((p) => (
