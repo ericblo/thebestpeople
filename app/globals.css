@@ -79,8 +79,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Geist', 'Geist Fallback';
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-sans: var(--font-geist), 'Geist', system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), 'Geist Mono', ui-monospace, monospace;
+  --font-serif: var(--font-newsreader), 'Newsreader', Georgia, serif;
   --color-block: var(--block-color);
   --color-block-highlight: var(--block-highlight);
   --color-background: var(--background);
@@ -131,6 +132,15 @@
 }
 
 @layer utilities {
+  /* Months when a role was vacant, acting, or not shown */
+  .hatched {
+    background-image: repeating-linear-gradient(
+      135deg,
+      color-mix(in oklch, var(--border) 55%, transparent) 0 1px,
+      transparent 1px 7px
+    );
+  }
+
   .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
@@ -143,5 +153,16 @@
   .momentum-scroll {
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-x: contain;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
