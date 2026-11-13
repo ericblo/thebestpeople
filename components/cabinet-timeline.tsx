@@ -53,13 +53,13 @@ const roles: Role[] = [
   {
     id: "dni",
     title: "Director of National Intelligence",
-    shortTitle: "Nat. Intelligence",
+    shortTitle: "Nat. Intel.",
   },
   { id: "seced", title: "Secretary of Education", shortTitle: "Education" },
   {
     id: "sectrans",
     title: "Secretary of Transportation",
-    shortTitle: "Transportation",
+    shortTitle: "Transport",
   },
 ];
 
@@ -1008,7 +1008,7 @@ export function CabinetTimeline() {
                   <div
                     key={role.id}
                     title={role.title}
-                    className="flex items-end justify-center text-center px-0.5 text-[9px] xl:text-[10px] font-medium uppercase tracking-[0.1em] leading-tight text-foreground/80"
+                    className="min-w-0 flex items-end justify-center text-center text-[9px] 2xl:text-[10px] font-medium uppercase tracking-[0.06em] leading-tight text-foreground/80 [overflow-wrap:anywhere]"
                   >
                     {role.shortTitle}
                   </div>
