@@ -15,23 +15,8 @@ export const metadata: Metadata = {
   title: 'The Best People',
   description: 'What a few employees think of their boss. A scrolling timeline of the people who ran the Trump White House from 2017 to 2021, in their own words.',
   generator: 'v0.app',
-  icons: {
-    icon: [
-      {
-        url: '/icon-light-32x32.png',
-        media: '(prefers-color-scheme: light)',
-      },
-      {
-        url: '/icon-dark-32x32.png',
-        media: '(prefers-color-scheme: dark)',
-      },
-      {
-        url: '/icon.svg',
-        type: 'image/svg+xml',
-      },
-    ],
-    apple: '/apple-icon.png',
-  },
+  // The icon and Apple touch icon are app/icon.png and app/apple-icon.png
+  // (the globe from ericblo.com).
 }
 
 export default function RootLayout({

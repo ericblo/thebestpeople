@@ -708,81 +708,6 @@ function Hero() {
 }
 
 // ============================================================================
-// Ending
-// ============================================================================
-const rolePlurals: Record<string, string> = {
-  sos: "secretaries of state",
-  ag: "attorneys general",
-  cos: "chiefs of staff",
-  secdef: "defense secretaries",
-  nsa: "national security advisors",
-  cjcs: "Joint Chiefs chairmen",
-  dni: "directors of national intelligence",
-};
-
-function Ending() {
-  const staff = people.filter((p) => p.id !== "trump");
-  const leftEarly = staff.filter(
-    (p) => p.exit.kind === "fired" || p.exit.kind === "resigned",
-  ).length;
-  const turnover = roles
-    .map((role) => ({
-      role,
-      count: people.filter((p) => p.role === role.id).length,
-    }))
-    .filter(({ role, count }) => count >= 3 && rolePlurals[role.id])
-    .sort((a, b) => b.count - a.count);
-
-  const stats = [
-    { value: "4", label: "years" },
-    { value: String(staff.length), label: "people shown here" },
-    { value: String(leftEarly), label: "fired, forced out or resigned" },
-  ];
-
-  return (
-    <section className="relative border-t border-border/60 px-6 py-24 md:py-36 text-center">
-      <div className="max-w-3xl mx-auto">
-        <div className="grid grid-cols-3 gap-4 md:gap-10">
-          {stats.map((stat) => (
-            <div key={stat.label}>
-              <div className="font-serif text-5xl md:text-8xl text-primary leading-none">
-                {stat.value}
-              </div>
-              <div className="text-[10px] md:text-xs uppercase tracking-[0.16em] text-muted-foreground mt-3 text-balance">
-                {stat.label}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <p className="font-serif text-2xl md:text-4xl text-foreground/90 leading-snug text-balance mt-16 md:mt-24">
-          {turnover.map(({ role, count }, i) => (
-            <span key={role.id}>
-              {i === 0 ? "" : " "}
-              {count} {rolePlurals[role.id]}.
-            </span>
-          ))}
-        </p>
-
-        <figure className="mt-16 md:mt-24">
-          <blockquote className="font-serif italic text-3xl md:text-5xl text-primary text-balance">
-            &ldquo;I know the best people.&rdquo;
-          </blockquote>
-          <figcaption className="text-[11px] uppercase tracking-[0.2em] text-muted-foreground mt-5">
-            Donald Trump, 2016
-          </figcaption>
-        </figure>
-
-        <p className="text-xs text-muted-foreground/80 mt-16 md:mt-24 max-w-md mx-auto text-pretty">
-          Every quote links to its source. Hatched stretches mark months when a
-          role was vacant, filled by an acting official, or not shown here.
-        </p>
-      </div>
-    </section>
-  );
-}
-
-// ============================================================================
 // Main component
 // ============================================================================
 export function CabinetTimeline() {
@@ -1214,8 +1139,6 @@ export function CabinetTimeline() {
           </div>
         </div>
       </main>
-
-      <Ending />
 
       {/* Quote rail (wide screens): its own column, never covers the grid */}
       <aside
